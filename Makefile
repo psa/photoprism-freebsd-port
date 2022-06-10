@@ -18,7 +18,7 @@ EXTRACT_DEPENDS=  ${RUN_DEPENDS} \
 	git:devel/git \
 	gmake:devel/gmake \
 	go>=1.18.2:lang/go \
-	npm:www/npm-node17 \
+	npm:www/npm-node18 \
 	wget:ftp/wget
 
 USES= gmake
