@@ -1,24 +1,24 @@
 # $FreeBSD$
 
 PORTNAME=	photoprism
-DISTVERSION=	g20210523
+DISTVERSION=	g20220528
 CATEGORIES=	www
 
 MAINTAINER=	huoju@devep.net
-COMMENT=	Personal Photo Management powered by Go and Google TensorFlow
+COMMENT=	Personal Photo Management Web Service
 
 LICENSE=	AGPLv3
 
 RUN_DEPENDS=  ffmpeg:multimedia/ffmpeg 
-LIB_DEPENDS=	libtensorflow.so.1:science/py-tensorflow
+
+LIB_DEPENDS=	libtensorflow.so.1:science/libtensorflow1
 
 EXTRACT_DEPENDS=  ${RUN_DEPENDS} \
 	bash:shells/bash \
-	bazel:devel/bazel029 \
 	git:devel/git \
 	gmake:devel/gmake \
-	go:lang/go \
-	npm:www/npm-node14 \
+	go>=1.18.2:lang/go \
+	npm:www/npm-node17 \
 	wget:ftp/wget
 
 USES= gmake
@@ -32,16 +32,6 @@ USE_RC_SUBR=    photoprism
 PHOTOPRISM_DATA_DIR=      /var/db/photoprism
 SUB_LIST+=      PHOTOPRISM_DATA_DIR=${PHOTOPRISM_DATA_DIR}
 SUB_FILES+=      pkg-install pkg-message
-
-OPTIONS_SINGLE=		CPUFEATURE 
-OPTIONS_SINGLE_CPUFEATURE=	NONE AVX AVX2
-OPTIONS_DEFAULT = AVX
-CPUFEATURE_DESC=          Enable AVX CPU extensions for Tensorflow
-NONE_VARS=	BAZEL_COPT=""
-AVX_VARS=	BAZEL_COPT="--copt=-march=core-avx-i --host_copt=-march=core-avx-i"
-AVX2_VARS=	BAZEL_COPT="--copt=-march=core-avx2 --host_copt=-march=core-avx2"
-
-.include <bsd.port.options.mk>
 
 post-extract:
 	@${REINPLACE_CMD} -e 's|sha1sum|shasum|g' ${WRKSRC}/scripts/download-nasnet.sh
